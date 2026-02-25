@@ -71,4 +71,19 @@ package() {
                 "${pkgdir}/usr/share/icons/hicolor/${size}x${size}/apps/claude-desktop.png"
         fi
     done
+
+    # The app hardcodes /usr/local/bin/claude as the path to the Claude Code CLI.
+    # Install a wrapper that finds the real binary via PATH at runtime.
+    install -dm755 "${pkgdir}/usr/local/bin"
+    cat > "${pkgdir}/usr/local/bin/claude" << 'WRAPPER'
+#!/bin/sh
+# Shim for Claude Desktop -- the app hardcodes /usr/local/bin/claude
+# but the CLI is typically installed at ~/.local/bin/claude via npm.
+for d in "$HOME/.local/bin" "$HOME/.local/share/mise/shims" "$HOME/.bun/bin"; do
+    [ -x "$d/claude" ] && exec "$d/claude" "$@"
+done
+echo "claude CLI not found. Install it: npm install -g @anthropic-ai/claude-code" >&2
+exit 1
+WRAPPER
+    chmod 755 "${pkgdir}/usr/local/bin/claude"
 }
