@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Claude
+GenericName=Claude Desktop
+Comment=Claude AI assistant
+Exec=/usr/bin/claude-desktop %U
+Icon=claude-desktop
+Terminal=false
+Categories=Office;Utility;
+MimeType=x-scheme-handler/claude;
+StartupWMClass=claude-desktop
+StartupNotify=true
+Keywords=claude;ai;anthropic;
