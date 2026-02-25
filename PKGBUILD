@@ -45,12 +45,7 @@ package() {
 
     # Install the bundled Electron runtime and application
     install -dm755 "${pkgdir}/usr/lib/claude-desktop"
-    cp -a usr/lib/electron/dist/* "${pkgdir}/usr/lib/claude-desktop/"
-
-    # Install additional node modules if present
-    if [ -d usr/lib/node_modules ]; then
-        cp -a usr/lib/node_modules "${pkgdir}/usr/lib/claude-desktop/"
-    fi
+    cp -a usr/lib/node_modules/electron/dist/* "${pkgdir}/usr/lib/claude-desktop/"
 
     # Install launcher wrapper
     install -Dm755 "${srcdir}/claude-desktop.sh" "${pkgdir}/usr/bin/claude-desktop"
