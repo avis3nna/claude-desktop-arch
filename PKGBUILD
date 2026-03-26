@@ -6,8 +6,8 @@
 # and Wayland flags for Hyprland/wlroots compositors.
 
 pkgname=claude-desktop
-_claude_ver=1.1.4173
-_wrapper_ver=1.3.14
+_claude_ver=1.1.8629
+_wrapper_ver=1.3.25
 pkgver=${_claude_ver}
 pkgrel=1
 pkgdesc="Claude Desktop for Linux"
@@ -17,6 +17,7 @@ _upstream="https://github.com/aaddrick/claude-desktop-debian"
 license=('MIT' 'Apache-2.0')
 depends=('gtk3' 'nss' 'alsa-lib' 'libxss')
 optdepends=(
+    'bubblewrap: cowork sandbox isolation (default backend)'
     'docker: for MCP servers that require containers'
     'libnotify: desktop notifications'
 )
@@ -31,7 +32,7 @@ source=(
     "claude-desktop.desktop"
 )
 noextract=("${_appimage}")
-sha256sums=('ca855730d61da82a1219619fd984999246b52813b695dbe1747d1fd5e2d6404a'
+sha256sums=('81401e4f7cfb2a2e129709198f49091dc25f4f1f2fcded131170fc9417d6f095'
             'SKIP'
             'SKIP')
 
