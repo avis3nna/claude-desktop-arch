@@ -6,12 +6,12 @@
 # and Wayland flags for Hyprland/wlroots compositors.
 
 pkgname=claude-desktop
-_claude_ver=1.1.8629
-_wrapper_ver=1.3.25
+_claude_ver=1.3109.0
+_wrapper_ver=2.0.0
 pkgver=${_claude_ver}
 pkgrel=1
 pkgdesc="Claude Desktop for Linux"
-arch=('x86_64')
+arch=('x86_64' 'aarch64')
 url="https://github.com/avis3nna/claude-desktop-arch"
 _upstream="https://github.com/aaddrick/claude-desktop-debian"
 license=('MIT' 'Apache-2.0')
@@ -25,20 +25,31 @@ provides=('claude-desktop')
 conflicts=('claude-desktop' 'claude-desktop-appimage' 'claude-desktop-native')
 options=(!strip !debug)
 
-_appimage="claude-desktop-${_claude_ver}-${_wrapper_ver}-amd64.AppImage"
+_release="${_upstream}/releases/download/v${_wrapper_ver}+claude${_claude_ver}"
+_appimage_x86_64="claude-desktop-${_claude_ver}-${_wrapper_ver}-amd64.AppImage"
+_appimage_aarch64="claude-desktop-${_claude_ver}-${_wrapper_ver}-arm64.AppImage"
+
 source=(
-    "${_upstream}/releases/download/v${_wrapper_ver}+claude${_claude_ver}/${_appimage}"
     "claude-desktop.sh"
     "claude-desktop.desktop"
 )
-noextract=("${_appimage}")
-sha256sums=('81401e4f7cfb2a2e129709198f49091dc25f4f1f2fcded131170fc9417d6f095'
-            'SKIP'
+source_x86_64=("${_release}/${_appimage_x86_64}")
+source_aarch64=("${_release}/${_appimage_aarch64}")
+noextract=("${_appimage_x86_64}" "${_appimage_aarch64}")
+sha256sums=('SKIP'
             'SKIP')
+sha256sums_x86_64=('ecea28c660e1ab0b28909659f3cd64648fb007e581fd02adaf2333f21f628ba8')
+sha256sums_aarch64=('ab6e4c4189f335f885abec53ad1e721c800f06061027c56b7eaeb088d744f0ee')
 
 prepare() {
+    local _appimage
+    case "$CARCH" in
+        x86_64)  _appimage="${_appimage_x86_64}"  ;;
+        aarch64) _appimage="${_appimage_aarch64}" ;;
+        *) echo "error: unsupported architecture: $CARCH" >&2; return 1 ;;
+    esac
     chmod +x "${srcdir}/${_appimage}"
-    "${srcdir}/${_appimage}" --appimage-extract >/dev/null 2>&1
+    "${srcdir}/${_appimage}" --appimage-extract >/dev/null
 }
 
 package() {
